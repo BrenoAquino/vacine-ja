@@ -1,0 +1,39 @@
+service: charles-vacine-ja
+
+plugins:
+  - serverless-python-requirements
+  - serverless-offline
+
+custom:
+  pythonRequirements:
+    pythonBin: python3
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: sa-east-1
+  stage: dev
+  profile: personal
+  lambdaHashingVersion: 20201221
+
+package:
+  individually: true
+  patterns:
+    - "!node_modules/**"
+    - "!.venv/**"
+    - "!package-lock.json"
+    - "!Pipfile"
+    - "!Pipfile.lock"
+    - "!README.md"
+    - "!.env"
+    - "!local-run.py"
+
+functions:
+  search-engine:
+    handler: handler.main
+    memorySize: 256
+    timeout: 30
+    events:
+      - schedule: cron(0 0 ? * * *)
+      - schedule: cron(0 8 ? * * *)
+      - schedule: cron(0 19 ? * * *)

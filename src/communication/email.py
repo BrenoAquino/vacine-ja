@@ -9,8 +9,8 @@ import boto3
 import logging
 
 def send_email(people):
-    if len(people) <= 0:
-        raise NoOneFoundException()
+    # if len(people) <= 0:
+    #     raise NoOneFoundException()
     
     people_formatted = [people_info_formatter(p) for p in people]
     charset = 'UTF-8'

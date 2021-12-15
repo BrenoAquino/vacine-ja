@@ -1,4 +1,5 @@
 service: charles-vacine-ja
+useDotenv: true
 
 plugins:
   - serverless-python-requirements
@@ -15,22 +16,28 @@ provider:
   stage: dev
   profile: personal
   lambdaHashingVersion: 20201221
+  environment:
+    ACCESS_KEY: ${env:ACCESS_KEY}
+    SECRET_ACCESS_KEY: ${env:SECRET_ACCESS_KEY}
+    REGION_NAME: ${env:REGION_NAME}
+    SENDER_EMAIL: ${env:SENDER_EMAIL}
+    DESTINATION_EMAIL: ${env:DESTINATION_EMAIL}
+    CPFs: ${env:CPFs}
+    NAMES: ${env:NAMES}
 
 package:
   individually: true
   patterns:
     - "!node_modules/**"
-    - "!.venv/**"
     - "!package-lock.json"
-    - "!Pipfile"
-    - "!Pipfile.lock"
-    - "!README.md"
+    - "!.venv/**"
     - "!.env"
-    - "!local-run.py"
+    - "!env.example"
+    - "!README.md"
 
 functions:
   search-engine:
-    handler: handler.main
+    handler: src/function.main
     memorySize: 256
     timeout: 30
     events:

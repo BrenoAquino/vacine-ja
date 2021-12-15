@@ -17,6 +17,9 @@ def main(event, context):
     
     page = 1
     for cpf in CPFs:
+        if len(cpf) != 14:
+            continue
+        
         logging.info(f'Searching for CPF: {cpf}')
         while True:
             try:
@@ -36,6 +39,9 @@ def main(event, context):
             
     page = 1 
     for name in NAMES:
+        if len(name) <= 0:
+            continue
+        
         logging.info(f'Searching for name: {name}')
         while True:
             try:

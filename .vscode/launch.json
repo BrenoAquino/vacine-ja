@@ -8,7 +8,7 @@
             "name": "Python: Arquivo Atual",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/local-run.py",
+            "program": "__main__.py",
             "console": "internalConsole"
         }
     ]

@@ -1,7 +1,7 @@
 from datetime import datetime
 from botocore.exceptions import ClientError
 
-from src.common.environment import SENDER_EMAIL, DESTINATION_EMAIL, AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, AWS_REGION_NAME
+from src.common.environment import SENDER_EMAIL, DESTINATION_EMAIL, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION_NAME
 from src.common.people_info_formatter import people_info_formatter
 from .exceptions import NoOneFoundException
 
@@ -24,7 +24,7 @@ def send_email(people):
 
     try:
         client = boto3.client('ses',
-            aws_access_key_id=AWS_ACCESS_KEY,
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
             region_name=AWS_REGION_NAME
         )

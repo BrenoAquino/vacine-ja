@@ -14,7 +14,6 @@ provider:
   runtime: python3.8
   region: sa-east-1
   stage: dev
-  profile: personal
   lambdaHashingVersion: 20201221
   environment:
     AUTH_AWS_ACCESS_KEY_ID: ${env:AUTH_AWS_ACCESS_KEY_ID}

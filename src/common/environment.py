@@ -3,7 +3,7 @@ import os
 
 load_dotenv()
 
-CPFs = os.getenv('CPFs').split('|')
+CPFs = os.getenv('CPFS').split('|')
 NAMES = os.getenv('NAMES').split('|')
 
 SENDER_EMAIL = os.getenv('SENDER_EMAIL')

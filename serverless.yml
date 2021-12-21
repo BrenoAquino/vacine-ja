@@ -20,7 +20,7 @@ provider:
     AUTH_AWS_REGION_NAME: ${env:AUTH_AWS_REGION_NAME}
     SENDER_EMAIL: ${env:SENDER_EMAIL}
     DESTINATION_EMAIL: ${env:DESTINATION_EMAIL}
-    CPFs: ${env:CPFs}
+    CPFS: ${env:CPFS}
     NAMES: ${env:NAMES}
 
 package:

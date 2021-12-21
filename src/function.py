@@ -15,12 +15,12 @@ def is_finished(content):
 def main(event, context):
     peoples = []
     
-    page = 1
     for cpf in CPFs:
         if len(cpf) != 14:
             continue
         
         logging.info(f'Searching for CPF: {cpf}')
+        page = 1
         while True:
             try:
                 session = requests.Session()
@@ -37,12 +37,12 @@ def main(event, context):
                 logging.error(f'Something went wrong while searching for CPF: {cpf}')
                 break
             
-    page = 1 
     for name in NAMES:
         if len(name) <= 0:
             continue
         
         logging.info(f'Searching for name: {name}')
+        page = 1 
         while True:
             try:
                 session = requests.Session()

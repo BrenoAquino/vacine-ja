@@ -32,5 +32,5 @@ jobs:
           AUTH_AWS_REGION_NAME: ${{ secrets.AUTH_AWS_REGION_NAME }}
           SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
           DESTINATION_EMAIL: ${{ secrets.DESTINATION_EMAIL }}
-          CPFs: ${{ secrets.CPFs }}
+          CPFS: ${{ secrets.CPFS }}
           NAMES: ${{ secrets.NAMES }}

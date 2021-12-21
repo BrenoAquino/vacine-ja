@@ -17,7 +17,7 @@ def send_email(people):
     sender = f'Charles <{SENDER_EMAIL}>'
     subject = 'Charles - Relatorio do Vacine Já'
     body_text = 'Charles procurou os C.P.F.s e nomes registrados no vacine já.\r\n' + \
-                'Caso queira olhar você mesmo basta acessar https://coronavirus.fortaleza.ce.gov.br/agendados.html ' + \
+                'Caso queira olhar você mesmo basta acessar https://vacinacao.sms.fortaleza.ce.gov.br/pesquisa/agendados ' + \
                 'e pesquisar pelo seu C.P.F. ou nome.\r\n\n\n' + \
                 '\n\n'.join(people_formatted) + \
                 '\n\n\nAtualziado em ' + datetime.today().strftime("%d/%m/%Y 'as' %H:%M:%S")

@@ -1,14 +1,34 @@
+from typing import List
 from datetime import datetime
 from botocore.exceptions import ClientError
 
-from src.common.environment import SENDER_EMAIL, DESTINATION_EMAIL, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION_NAME
+from src.common.environment import SENDER_EMAIL, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION_NAME
 from src.common.people_info_formatter import people_info_formatter
-from .exceptions import NoOneFoundException
+from .exceptions import NoOneFoundException, FailureToConnectToSNSException, FailureToSendEmailException
 
 import boto3
 import logging
 
-def send_email(people):
+def send_email(people: List[str], destionations: List[str]):
+    """
+    Send email to the destionations with the people informations.
+    
+    Parameters
+    ----------
+    people : List[str]
+        List of people with their informations.
+    destionations : List[str]
+        List of emails to send the email to.
+        
+    Raises
+    ------
+    NoOneFoundException
+        If there is no one to send the email.
+    FailureToConnectToSNSException
+        If there is a problem to connect to SNS.
+    FailureToSendEmailException
+        If there is any problem. 
+    """
     if len(people) <= 0:
         raise NoOneFoundException()
     
@@ -31,7 +51,7 @@ def send_email(people):
         
         client.send_email(
             Destination={
-                'ToAddresses': DESTINATION_EMAIL,
+                'ToAddresses': destionations,
             },
             Message={
                 'Body': {
@@ -51,6 +71,8 @@ def send_email(people):
         
     except ClientError as e:
         logging.error(e.response['Error']['Message'])
+        raise FailureToConnectToSNSException()
+    
     except Exception as e:
         logging.error(e)
-        
+        raise FailureToSendEmailException()

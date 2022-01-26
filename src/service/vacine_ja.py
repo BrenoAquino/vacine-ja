@@ -1,11 +1,13 @@
 import json
+from turtle import st
 
+from requests import Session
 from types import SimpleNamespace
 from bs4 import BeautifulSoup
 
 from .exceptions import UnavailableTokenException, InvalidSearchReponseException
 
-def extract_token(session):
+def extract_token(session: Session):
     """
     Extract token from the page
     
@@ -18,6 +20,11 @@ def extract_token(session):
     -------
     token : str
         Token to validate next request
+        
+    Raises
+    ------
+    UnavailableTokenException
+        If the token is not available
     """
     response = session.get('https://vacinacao.sms.fortaleza.ce.gov.br/pesquisa/agendados')
     response.raise_for_status()
@@ -30,7 +37,7 @@ def extract_token(session):
         raise UnavailableTokenException()
 
     
-def search_for_people(session, token, page, name='', cpf=''):
+def search_for_people(session: Session, token: str, page: int, name: str = '', cpf: str = ''):
     """
     Search for people by name or cpf
     
@@ -46,6 +53,11 @@ def search_for_people(session, token, page, name='', cpf=''):
         Name to search
     cpf : str
         CPF to search
+        
+    Raises
+    ------
+    InvalidSearchReponseException
+        If the response is not a json.
     """
     response = session.post(
         'https://vacinacao.sms.fortaleza.ce.gov.br/pesquisa/grid', 
@@ -66,5 +78,6 @@ def search_for_people(session, token, page, name='', cpf=''):
     try:
         json_response = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
         return json_response
+    
     except:
         raise InvalidSearchReponseException()

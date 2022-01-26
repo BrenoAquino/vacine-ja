@@ -8,11 +8,12 @@ from src.communication.exceptions import NoOneFoundException
 import requests
 import logging
 
+
 def is_finished(content):
     return len(content.rows) < content.rowsPerPage
 
 
-def main(event, context):
+def handler(event, context):
     peoples = []
     
     for cpf in CPFs:

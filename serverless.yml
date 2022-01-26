@@ -34,11 +34,5 @@ package:
     - "!README.md"
 
 functions:
-  search-engine:
-    handler: src/function.main
-    memorySize: 256
-    timeout: 30
-    events:
-      - schedule: cron(0 0 ? * * *)
-      - schedule: cron(0 8 ? * * *)
-      - schedule: cron(0 19 ? * * *)
+  - ${file(src/functions/checker/function.yml)}
+  - ${file(src/functions/checker/tester.yml)}

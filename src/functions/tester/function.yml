@@ -1,0 +1,10 @@
+tester:
+  handler: src/functions/tester/main.handler
+  memorySize: 256
+  timeout: 30
+  events:
+    - schedule: cron(0 8 ? * * 6)
+    - http: 
+        path: vacineja/test
+        method: get
+        cors: true

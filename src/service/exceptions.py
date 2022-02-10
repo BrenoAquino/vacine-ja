@@ -1,7 +1,7 @@
-class UnavailableTokenException(Exception):
-    """ Exception for when cannot get a token from the server """
+class InvalidPdfsResponseException(Exception):
+    """ Exception for when the pdfs response is invalid """
     pass
 
-class InvalidSearchReponseException(Exception):
-    """ Exception for when the search response is invalid """
+class InvalidPdfsResponseFormatException(Exception):
+    """ Exception for when the pdfs response is invalid """
     pass

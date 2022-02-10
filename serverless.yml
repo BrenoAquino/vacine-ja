@@ -34,5 +34,4 @@ package:
     - "!README.md"
 
 functions:
-  - ${file(src/functions/checker/function.yml)}
-  - ${file(src/functions/checker/tester.yml)}
+  - ${file(src/functions/reader/function.yml)}

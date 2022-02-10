@@ -2,7 +2,7 @@ from typing import List
 from datetime import datetime
 from botocore.exceptions import ClientError
 
-from src.common.environment import SENDER_EMAIL, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION_NAME
+from src.common.environment import SENDER_EMAIL
 from src.common.people_info_formatter import people_info_formatter
 from .exceptions import NoOneFoundException, FailureToConnectToSNSException, FailureToSendEmailException
 
@@ -43,12 +43,7 @@ def send_email(people: List[str], destionations: List[str]):
                 '\n\n\nAtualziado em ' + datetime.today().strftime("%d/%m/%Y 'as' %H:%M:%S")
 
     try:
-        client = boto3.client('ses',
-            aws_access_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name=AWS_REGION_NAME
-        )
-        
+        client = boto3.client('ses')
         client.send_email(
             Destination={
                 'ToAddresses': destionations,

@@ -1,4 +1,4 @@
-from src.functions.reader.main import handler as reader_handler
+from src.functions.pdf_reader.main import handler as reader_handler
 import logging
 
 logging.basicConfig(level=logging.INFO)

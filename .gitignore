@@ -143,3 +143,6 @@ cython_debug/
 # Serverless
 .serverless
 node_modules/
+
+# Temp
+tmp/

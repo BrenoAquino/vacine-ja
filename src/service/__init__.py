@@ -1,1 +1,0 @@
-from .vacine_ja import extract_token, search_for_people

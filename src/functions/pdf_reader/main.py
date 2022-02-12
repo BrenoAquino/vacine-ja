@@ -21,6 +21,7 @@ def handler(event, context):
         pdfs_service = PdfsService(pdfs_paths)
         people = [People(person[0], person[1]) for person in PEOPLE]
         schedules = pdfs_service.search_for_people(people)
+        pdfs_service.delete_pdfs()
         
         logging.info('Sending emails')
         notifier = EmailSender(SENDER_EMAIL)

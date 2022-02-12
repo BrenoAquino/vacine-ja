@@ -15,13 +15,9 @@ provider:
   stage: dev
   lambdaHashingVersion: 20201221
   environment:
-    AUTH_AWS_ACCESS_KEY_ID: ${env:AUTH_AWS_ACCESS_KEY_ID}
-    AUTH_AWS_SECRET_ACCESS_KEY: ${env:AUTH_AWS_SECRET_ACCESS_KEY}
-    AUTH_AWS_REGION_NAME: ${env:AUTH_AWS_REGION_NAME}
     SENDER_EMAIL: ${env:SENDER_EMAIL}
     DESTINATION_EMAIL: ${env:DESTINATION_EMAIL}
-    CPFS: ${env:CPFS}
-    NAMES: ${env:NAMES}
+    PEOPLE: ${env:PEOPLE}
 
 package:
   individually: true
@@ -34,4 +30,4 @@ package:
     - "!README.md"
 
 functions:
-  - ${file(src/functions/reader/function.yml)}
+  - ${file(src/functions/pdf_reader/function.yml)}

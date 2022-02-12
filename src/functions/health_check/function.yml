@@ -1,5 +1,5 @@
-pdf-reader:
-  handler: src/dunctions/pdf_reader/main.handler
+health-check:
+  handler: src/dunctions/health_check/main.handler
   memorySize: 256
   timeout: 60
   events:

@@ -101,3 +101,37 @@ class EmailSender:
         except Exception as e:
             logging.error(e)
             raise FailureToSendEmailException()
+        
+    
+    def send_health_check_email(self, destionations: List[str]):
+        subject = 'Charles - Relatorio do Vacine Já - Health Check'
+        body_text = 'Charles está funcionando corretamente!'
+        
+        try:
+            self.__ses.send_email(
+                Destination={
+                    'ToAddresses': destionations,
+                },
+                Message={
+                    'Body': {
+                        'Text': {
+                            'Charset': self.__charset,
+                            'Data': body_text,
+                        },
+                    },
+                    'Subject': {
+                        'Charset': self.__charset,
+                        'Data': subject,
+                    },
+                },
+                Source=self.__sender
+            )
+            logging.info('Email sent!')
+            
+        except ClientError as e:
+            logging.error(e.response['Error']['Message'])
+            raise FailureToConnectToSNSException()
+        
+        except Exception as e:
+            logging.error(e)
+            raise FailureToSendEmailException()

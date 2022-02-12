@@ -3,8 +3,7 @@ import os
 
 load_dotenv()
 
-CPFs = os.getenv('CPFS').split('|')
-NAMES = os.getenv('NAMES').split('|')
+PEOPLE = [tuple(single_peoples.split('@')) for single_peoples in os.getenv('PEOPLE').split('|')]
 
 SENDER_EMAIL = os.getenv('SENDER_EMAIL')
 DESTINATION_EMAIL = os.getenv('DESTINATION_EMAIL').split('|')

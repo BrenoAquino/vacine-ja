@@ -8,14 +8,14 @@ from src.common.environment import PDF_LIMIT
 from src.common.environment import PREFIX_DATE
 from src.models.pdf import PDF
 
-from .exceptions import InvalidPdfsResponseException, InvalidPdfsResponseFormatException
+from .exceptions import InvalidPdfsResponseException, InvalidPdfsResponseFormatException, FailureToConnectVacineJaException
     
 class VacineJaService:
     def __init__(self, session: Session):
         self.__session = session
 
 
-    def __extract_pdfs_from_request(self):
+    def __pdfs_from_vacine_ja(self):
         """
         Extract pdf links from the page
         
@@ -31,11 +31,16 @@ class VacineJaService:
             
         Raises
         ------
+        FailureToConnectVacineJaException
+            If the page could not be reached.
         InvalidPdfsResponseException
             If the response is not a json.
         """
-        response = self.__session.get('https://docs.google.com/spreadsheets/d/1IJBDu8dRGLkBgX72sRWKY6R9GfefsaDCXBd3Dz9PZNs/gviz/tq?gid=970021343')
-        response.raise_for_status()
+        try:
+            response = self.__session.get('https://docs.google.com/spreadsheets/d/1IJBDu8dRGLkBgX72sRWKY6R9GfefsaDCXBd3Dz9PZNs/gviz/tq?gid=970021343')
+            response.raise_for_status()
+        except:
+            raise FailureToConnectVacineJaException()
         
         try:
             start_json_index = response.text.find('{')
@@ -48,7 +53,27 @@ class VacineJaService:
             raise InvalidPdfsResponseException()
     
     
-    def __convert_to_pdf(self, keys: List[str], raw_pdf: dict) -> PDF:
+    def __create_pdf(self, keys: List[str], raw_pdf: dict) -> PDF:
+        """
+        Create a pdf object from a raw pdf info.
+        
+        Parameters
+        ----------
+        keys : List[str]
+            List of keys (fields).
+        raw_pdf : dict
+            Raw pdf info.
+            
+        Returns
+        -------
+        PDF
+            Pdf object.
+            
+        Raises
+        ------
+        InvalidPdfsResponseFormatException
+            If the response has not the expected format.
+        """
         values = raw_pdf.get('c')
         if values is None or len(values) != len(keys):
             raise InvalidPdfsResponseFormatException()
@@ -69,7 +94,7 @@ class VacineJaService:
         return PDF(pdf_dict['titulo'], pdf_dict['date'], pdf_dict['pdf'])
     
     
-    def __format_response_to_pdfs(self, response: dict, limit: int) -> List[dict]:
+    def __convert_response_to_pdfs(self, response: dict, limit: int) -> List[PDF]:
         """
         Format table to pdf object
         
@@ -84,6 +109,11 @@ class VacineJaService:
         -------
         pdf_object : dict
             Pdf object
+            
+        Raises
+        ------
+        InvalidPdfsResponseFormatException
+            If the response has not the expected format.
         """
         pdfs = []
         table: dict = response.get('table')
@@ -100,10 +130,29 @@ class VacineJaService:
         # Getting Fields Values
         pdfs_infos = rows[1:limit + 1]
         for pdf_info in pdfs_infos:
-            pdf = self.__convert_to_pdf(keys, pdf_info)
+            pdf = self.__create_pdf(keys, pdf_info)
             pdfs.append(pdf)
             
         return pdfs
+    
+    
+    def __filter_lastest_pdfs(self, pdfs: List[PDF]) -> List[PDF]:
+        """
+        Filter pdfs by date to return only the lastest pdfs.
+        
+        Parameters
+        ----------
+        pdfs : list
+            List of pdfs
+            
+        Returns
+        -------
+        pdfs : list
+            List of pdfs
+        """
+        lastest_pdf = max(pdfs, key=lambda pdf: pdf.date)
+        all_pdfs_with_lastest_date = list(filter(lambda pdf: pdf.date == lastest_pdf.date, pdfs))
+        return all_pdfs_with_lastest_date
     
     
     def __download_pdfs(self, pdfs: List[PDF]) -> List[PDF]:
@@ -138,7 +187,24 @@ class VacineJaService:
     
     
     def get_pdfs(self) -> List[PDF]:
-        pdfs_response = self.__extract_pdfs_from_request()
-        pdfs = self.__format_response_to_pdfs(pdfs_response, PDF_LIMIT)
-        self.__download_pdfs(pdfs)
-        return pdfs
+        """
+        Get lastest pdfs and download them.
+        
+        Returns
+        -------
+        List[str]
+            List of pdfs
+            
+        Raises
+        ------
+        FailureToConnectVacineJaException
+            If the page could not be reached.
+        InvalidPdfsResponseException
+            If the response is not a json.
+        InvalidPdfsResponseFormatException
+            If the response has not the expected format.
+        """
+        pdfs = self.__pdfs_from_vacine_ja()
+        pdfs = self.__convert_response_to_pdfs(pdfs, PDF_LIMIT)
+        pdfs = self.__filter_lastest_pdfs(pdfs)
+        return self.__download_pdfs(pdfs)

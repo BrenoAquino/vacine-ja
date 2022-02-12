@@ -1,3 +1,5 @@
+import os
+
 from typing import List
 from pandas import concat, DataFrame
 from camelot import read_pdf
@@ -87,4 +89,11 @@ class PdfsService:
                     schedules.append(schedule)
                     
         return schedules
-        
+    
+    
+    def delete_pdfs(self):
+        """
+        Delete pdfs
+        """
+        for pdf in self.__pdfs:
+            os.remove(pdf.path)

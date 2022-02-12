@@ -1,7 +1,7 @@
-from src.functions.pdf_reader.main import handler as reader_handler
-import logging
+from src.common.setup_logging import setup_logging
+from src.functions.pdf_reader.main import handler as pdf_reader_handler
+from src.functions.health_check.main import handler as health_check_handler
 
-logging.basicConfig(level=logging.INFO)
-
-# checker_handler(None, None)
-reader_handler(None, None)
+setup_logging()
+pdf_reader_handler(None, None)
+# health_check_handler(None, None)
